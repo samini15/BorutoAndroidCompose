@@ -1,8 +1,10 @@
 package com.example.borutoandroidcompose.data.local.dao
 
+import androidx.room.Dao
 import androidx.room.Query
 import com.example.borutoandroidcompose.domain.model.HeroRemoteKey
 
+@Dao
 interface HeroRemoteKeyDao : BaseDao<HeroRemoteKey> {
     @Query("SELECT * FROM hero_remote_key_table WHERE id = :id")
     suspend fun getRemoteKey(id: Int): HeroRemoteKey?

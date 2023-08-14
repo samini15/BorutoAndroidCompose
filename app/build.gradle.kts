@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("kotlin-android")
-    //id("dagger.hilt.android.plugin")
+    id("dagger.hilt.android.plugin")
     id("kotlinx-serialization")
 }
 
@@ -81,4 +81,9 @@ dependencies {
     kapt("androidx.room:room-compiler:2.5.2")
 
 
+    // Dagger - Hilt
+    implementation("com.google.dagger:hilt-android:2.44.2")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0-alpha01")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    kapt("androidx.hilt:hilt-compiler:1.0.0")
 }
