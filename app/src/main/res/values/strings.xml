@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">BorutoAndroidCompose</string>
     <string name="app_logo">App Logo</string>
+    <string name="onboarding_image">Onboarding image</string>
 </resources>
