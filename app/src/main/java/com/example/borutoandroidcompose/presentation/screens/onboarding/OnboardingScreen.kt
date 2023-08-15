@@ -36,6 +36,7 @@ import com.example.borutoandroidcompose.ui.theme.activeIndicatorColor
 import com.example.borutoandroidcompose.ui.theme.inactiveIndicatorColor
 import com.example.borutoandroidcompose.ui.theme.normalTextColor
 import com.example.borutoandroidcompose.ui.theme.titleColor
+import com.example.borutoandroidcompose.utils.Constants
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 
@@ -151,9 +152,9 @@ fun FinishButton(
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.Center
     ) {
-        AnimatedVisibility(modifier = modifier.padding(LARGEST_PADDING), visible = pagerState.currentPage == 2) {
+        AnimatedVisibility(modifier = modifier.padding(LARGEST_PADDING), visible = pagerState.currentPage == Constants.LAST_ONBOARDING_PAGE) {
             Button(onClick = { onClick }) {
-                Text(text = "Finish")
+                Text(text = stringResource(R.string.finish))
             }
         }
     }

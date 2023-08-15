@@ -89,4 +89,7 @@ dependencies {
 
     // Accompanist Pager indicator - ONLY for Indicator -- DEPRECATED
     implementation("com.google.accompanist:accompanist-pager-indicators:0.21.2-beta")
+
+    // Data store preferences
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 }
