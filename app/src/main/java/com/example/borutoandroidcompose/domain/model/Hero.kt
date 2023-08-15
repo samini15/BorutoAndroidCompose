@@ -2,9 +2,11 @@ package com.example.borutoandroidcompose.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
 const val HERO_DATABASE_TABLE = "hero_table"
 @Entity(tableName = HERO_DATABASE_TABLE)
+@Serializable
 data class Hero(
     @PrimaryKey(autoGenerate = false)
     val id: Int,
