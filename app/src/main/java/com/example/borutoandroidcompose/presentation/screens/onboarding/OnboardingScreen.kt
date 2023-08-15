@@ -25,9 +25,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.borutoandroidcompose.R
 import com.example.borutoandroidcompose.domain.model.OnboardingPage
+import com.example.borutoandroidcompose.navigation.Screen
 import com.example.borutoandroidcompose.ui.theme.LARGEST_PADDING
 import com.example.borutoandroidcompose.ui.theme.MEDIUM_PADDING
 import com.example.borutoandroidcompose.ui.theme.PAGER_INDICATOR_SPACING
@@ -37,12 +39,16 @@ import com.example.borutoandroidcompose.ui.theme.inactiveIndicatorColor
 import com.example.borutoandroidcompose.ui.theme.normalTextColor
 import com.example.borutoandroidcompose.ui.theme.titleColor
 import com.example.borutoandroidcompose.utils.Constants
+import com.example.borutoandroidcompose.viewModel.OnboardingViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun OnboardingScreen(navController: NavHostController) {
+fun OnboardingScreen(
+    navController: NavHostController,
+    onboardingViewModel: OnboardingViewModel = hiltViewModel()
+) {
     val pages = listOf(
         OnboardingPage.Greetings,
         OnboardingPage.Explore,
@@ -98,7 +104,9 @@ fun OnboardingScreen(navController: NavHostController) {
         }*/
         
         FinishButton(modifier = Modifier.weight(2f), pagerState = pagerState) {
-            
+            onboardingViewModel.saveOnboardingState(completed = true)
+            navController.popBackStack()
+            navController.navigate(Screen.Home.route)
         }
     }
 }
@@ -153,7 +161,7 @@ fun FinishButton(
         horizontalArrangement = Arrangement.Center
     ) {
         AnimatedVisibility(modifier = modifier.padding(LARGEST_PADDING), visible = pagerState.currentPage == Constants.LAST_ONBOARDING_PAGE) {
-            Button(onClick = { onClick }) {
+            Button(onClick = { onClick() }) {
                 Text(text = stringResource(R.string.finish))
             }
         }
