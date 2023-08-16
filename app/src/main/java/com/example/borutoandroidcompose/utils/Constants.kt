@@ -17,4 +17,7 @@ object Constants {
     // Data store preferences
     const val PREFERENCES_NAME = "boruto_preferences"
     const val PREFERENCE_ONBOARDING_STATE = "preference_onboarding"
+
+    // Paging 3
+    const val PAGING_BATCH_SIZE = 3
 }

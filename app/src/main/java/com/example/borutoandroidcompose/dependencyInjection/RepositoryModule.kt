@@ -3,7 +3,10 @@ package com.example.borutoandroidcompose.dependencyInjection
 import android.content.Context
 import com.example.borutoandroidcompose.data.prefs.DataStoreOperations
 import com.example.borutoandroidcompose.data.prefs.DataStoreOperationsImpl
-import com.example.borutoandroidcompose.domain.repository.local.LocalBorutoRepository
+import com.example.borutoandroidcompose.data.remote.RemoteDataSource
+import com.example.borutoandroidcompose.domain.model.Hero
+import com.example.borutoandroidcompose.domain.repository.BaseRepository
+import com.example.borutoandroidcompose.domain.repository.BorutoRepository
 import com.example.borutoandroidcompose.domain.useCases.onboarding.OnboardingUseCases
 import com.example.borutoandroidcompose.domain.useCases.onboarding.ReadOnboardingStateUseCase
 import com.example.borutoandroidcompose.domain.useCases.onboarding.SaveOnboardingUseCase
@@ -27,7 +30,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideOnboardingUseCases(repository: LocalBorutoRepository) : OnboardingUseCases =
+    fun provideOnboardingUseCases(repository: BorutoRepository) : OnboardingUseCases =
         OnboardingUseCases(
             saveOnboardingUseCase = SaveOnboardingUseCase(repository = repository),
             readOnboardingStateUseCase = ReadOnboardingStateUseCase(repository = repository)

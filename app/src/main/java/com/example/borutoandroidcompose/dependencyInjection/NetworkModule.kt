@@ -1,6 +1,10 @@
 package com.example.borutoandroidcompose.dependencyInjection
 
+import com.example.borutoandroidcompose.data.local.BorutoDatabase
 import com.example.borutoandroidcompose.data.remote.BorutoApiService
+import com.example.borutoandroidcompose.data.remote.RemoteDataSource
+import com.example.borutoandroidcompose.data.remote.RemoteDataSourceImpl
+import com.example.borutoandroidcompose.domain.model.Hero
 import com.example.borutoandroidcompose.utils.Constants
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -38,4 +42,15 @@ object NetworkModule {
     @Singleton
     fun provideBorutoApiService(retrofit: Retrofit) : BorutoApiService =
         retrofit.create(BorutoApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideRemoteDataSource(
+        borutoApiService: BorutoApiService,
+        borutoDatabase: BorutoDatabase
+    ): RemoteDataSource<Hero> =
+        RemoteDataSourceImpl(
+            borutoApiService = borutoApiService,
+            borutoDatabase = borutoDatabase
+        )
 }
