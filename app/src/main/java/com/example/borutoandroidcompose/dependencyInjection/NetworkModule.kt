@@ -12,7 +12,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
@@ -35,7 +35,7 @@ object NetworkModule {
         Retrofit.Builder()
             .baseUrl(Constants.BORUTO_API_BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(Json.asConverterFactory(MediaType.get("application/json")))
+            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .build()
 
     @Provides

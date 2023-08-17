@@ -180,8 +180,8 @@ fun CalculateStars(rating: Double): Map<String, Int> {
 
 @Preview(showBackground = true)
 @Composable
-fun FilledStarPreview() {
-    RatingWidget(modifier = Modifier, rating = 2.0)
+fun RatingWidgetPreview() {
+    RatingWidget(modifier = Modifier, rating = 2.4)
 }
 
 @Preview(showBackground = true)
