@@ -17,8 +17,8 @@ class RemoteDataSourceImpl(
 
     private val heroDao = borutoDatabase.heroDao()
     @OptIn(ExperimentalPagingApi::class)
-    override fun getAllData(): Flow<PagingData<Hero>> =
-        Pager(
+    override fun getAllData(): Flow<PagingData<Hero>> {
+        return Pager(
             config = PagingConfig(pageSize = Constants.PAGING_BATCH_SIZE),
             remoteMediator = HeroRemoteMediator(
                 borutoApiService = borutoApiService,
@@ -26,6 +26,7 @@ class RemoteDataSourceImpl(
             ),
             pagingSourceFactory = { heroDao.getAllHeroes() }
         ).flow
+    }
 
     override fun searchData(): Flow<PagingData<Hero>> {
         TODO("Not yet implemented")

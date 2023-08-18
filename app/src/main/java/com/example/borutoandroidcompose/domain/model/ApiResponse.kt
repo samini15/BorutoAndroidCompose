@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class ApiResponse<Data>(
     val success: Boolean,
     val message: String? = null,
-    val prevPage: Int? = null,
+    val previousPage: Int? = null,
     val nextPage: Int? = null,
     val result: List<Data> = emptyList()
 )

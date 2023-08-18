@@ -24,8 +24,8 @@ class HeroRemoteMediator @Inject constructor(
     private val heroDao = borutoDatabase.heroDao()
     private val heroRemoteKeysDao = borutoDatabase.heroRemoteKeyDao()
 
-    override suspend fun load(loadType: LoadType, state: PagingState<Int, Hero>): MediatorResult =
-        try {
+    override suspend fun load(loadType: LoadType, state: PagingState<Int, Hero>): MediatorResult {
+        return try {
             val page = when (loadType) {
                 LoadType.REFRESH -> {
                     val remoteKeys = getRemoteKeyClosestToCurrentPosition(state = state)
@@ -33,24 +33,24 @@ class HeroRemoteMediator @Inject constructor(
                 }
                 LoadType.PREPEND -> {
                     val remoteKeys = getRemoteKeysForFirstItem(state)
-                    val previousPage = remoteKeys?.previousPage/* ?: MediatorResult.Success(endOfPaginationReached = remoteKeys != null)*/
+                    val previousPage = remoteKeys?.previousPage ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
                     previousPage
                 }
                 LoadType.APPEND -> {
                     val remoteKeys = getRemoteKeysForLastItem(state)
-                    val nextPage = remoteKeys?.nextPage/* ?: MediatorResult.Success(endOfPaginationReached = remoteKeys != null)*/
+                    val nextPage = remoteKeys?.nextPage ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
                     nextPage
                 }
             }
-            val response = page?.let { borutoApiService.getAllHeroes(page = it) }
-            if (response?.result?.isNotEmpty() == true) {
+            val response = borutoApiService.getAllHeroes(page = page)
+            if (response.result.isNotEmpty()) {
                 // Offline caching
                 borutoDatabase.withTransaction {
                     if (loadType == LoadType.REFRESH) {
                         heroDao.deleteAllHeroes()
                         heroRemoteKeysDao.deleteAllRemoteKeys()
                     }
-                    val previousPage = response.prevPage
+                    val previousPage = response.previousPage
                     val nextPage = response.nextPage
                     val keys = response.result.map { hero ->
                         HeroRemoteKey(
@@ -64,10 +64,11 @@ class HeroRemoteMediator @Inject constructor(
                     response.result.forEach { heroDao.addEntity(entity = it) }
                 }
             }
-            MediatorResult.Success(endOfPaginationReached = response?.nextPage == null)
+            MediatorResult.Success(endOfPaginationReached = response.nextPage == null)
         } catch (e: Exception) {
             MediatorResult.Error(e)
         }
+    }
 
     private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, Hero>) : HeroRemoteKey? =
         state.anchorPosition?.let { position ->

@@ -25,6 +25,6 @@ fun HomeScreen(
     Scaffold(
         topBar = { HomeTopBar(onSearchClicked = {}) }
     ) {
-        ListContent(items = allHeroes, navController = navController)
+        ListContent(items = allHeroes, navController = navController, topPadding = it.calculateTopPadding())
     }
 }
