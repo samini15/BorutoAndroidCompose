@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -52,17 +53,20 @@ fun ListContent(
     items: LazyPagingItems<Hero>,
     topPadding: Dp
 ) {
-    LazyColumn(
-        modifier = Modifier.padding(top = topPadding),
-        contentPadding = PaddingValues(all = MEDIUM_PADDING),
-        verticalArrangement = Arrangement.spacedBy(MEDIUM_PADDING)
-    ) {
-        items(count = items.itemCount) { i ->
-            val item = items[i]
-            item?.let {  hero ->
-                HeroItem(hero = hero, navController = navController)
-            }
+    val pagingResult = handlePagingResult(heroes = items)
+    if (pagingResult) {
+        LazyColumn(
+            modifier = Modifier.padding(top = topPadding),
+            contentPadding = PaddingValues(all = MEDIUM_PADDING),
+            verticalArrangement = Arrangement.spacedBy(MEDIUM_PADDING)
+        ) {
+            items(count = items.itemCount) { i ->
+                val item = items[i]
+                item?.let {  hero ->
+                    HeroItem(hero = hero, navController = navController)
+                }
 
+            }
         }
     }
 }
@@ -137,6 +141,36 @@ fun HeroItem(
                     Text(text = "(${hero.rating})", textAlign = TextAlign.Center, color = Color.White.copy(alpha = ContentAlpha.medium))
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun handlePagingResult(
+    heroes: LazyPagingItems<Hero>
+): Boolean {
+    heroes.apply {
+        val error = when {
+            loadState.refresh is LoadState.Error -> loadState.refresh as LoadState.Error
+            loadState.prepend is LoadState.Error -> loadState.prepend as LoadState.Error
+            loadState.append is LoadState.Error -> loadState.append as LoadState.Error
+            else -> null
+        }
+
+        return when {
+            /*loadState.refresh is LoadState.Loading -> {
+                // TODO Loading effect
+                false
+            }*/
+            error != null -> {
+                EmptyScreen(error = error)
+                false
+            }
+            heroes.itemCount < 1 -> {
+                EmptyScreen()
+                false
+            }
+            else -> true
         }
     }
 }
