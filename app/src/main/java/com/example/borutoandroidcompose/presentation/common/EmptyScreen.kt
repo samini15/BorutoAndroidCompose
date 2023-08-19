@@ -28,20 +28,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
 import com.example.borutoandroidcompose.R
-import com.example.borutoandroidcompose.domain.model.Hero
 import com.example.borutoandroidcompose.ui.theme.DarkGray
 import com.example.borutoandroidcompose.ui.theme.LightGray
 import com.example.borutoandroidcompose.ui.theme.SMALL_PADDING
+import java.net.ConnectException
+import java.net.SocketTimeoutException
 
 @Composable
 fun EmptyScreen(
-    error: LoadState.Error? = null,
-    heroes: LazyPagingItems<Hero>? = null
+    error: LoadState.Error
 ) {
     val message by remember {
-        mutableStateOf(parseErrorMessage(message = error.toString()))
+        mutableStateOf(parseErrorMessage(error = error))
     }
 
     val icon by remember {
@@ -98,10 +97,10 @@ fun EmptyContent(
     }
 }
 
-fun parseErrorMessage(message: String) : String {
-    return when {
-        message.contains("SocketTimeoutException") -> "Server Unavailable."
-        message.contains("ConnectionException") -> "Internet Unavailable."
+fun parseErrorMessage(error: LoadState.Error) : String {
+    return when(error.error) {
+        is SocketTimeoutException -> "Server Unavailable."
+        is ConnectException -> "Internet Unavailable."
         else -> "Unknown Error."
     }
 }
