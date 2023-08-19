@@ -8,7 +8,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
@@ -17,11 +16,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -46,6 +45,7 @@ fun SearchTopBar(
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchWidget(
     text: String,
@@ -53,6 +53,8 @@ fun SearchWidget(
     onSearchClicked: (String) -> Unit,
     onCloseClicked: () -> Unit
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Surface(modifier = Modifier
         .fillMaxWidth()
         .height(TOP_APP_BAR_HEIGHT),
@@ -103,12 +105,10 @@ fun SearchWidget(
             keyboardActions = KeyboardActions(
                 onSearch = {
                     onSearchClicked(text)
+                    keyboardController?.hide()
                 }
-            )/*,
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.Transparent,
-                cursorColor = MaterialTheme.colorScheme.topAppBarContentColor
-            )*/
+            ),
+            textStyle = TextStyle(color = MaterialTheme.colorScheme.topAppBarContentColor)
         )
     }
 }

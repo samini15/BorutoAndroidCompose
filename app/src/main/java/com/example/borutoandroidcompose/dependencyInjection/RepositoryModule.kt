@@ -12,6 +12,8 @@ import com.example.borutoandroidcompose.domain.useCases.home.HomeUseCases
 import com.example.borutoandroidcompose.domain.useCases.onboarding.OnboardingUseCases
 import com.example.borutoandroidcompose.domain.useCases.onboarding.ReadOnboardingStateUseCase
 import com.example.borutoandroidcompose.domain.useCases.onboarding.SaveOnboardingUseCase
+import com.example.borutoandroidcompose.domain.useCases.search.SearchHeroesUseCase
+import com.example.borutoandroidcompose.domain.useCases.search.SearchUseCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,5 +45,12 @@ object RepositoryModule {
     fun provideHomeUseCases(repository: BorutoRepository): HomeUseCases =
         HomeUseCases(
             getAllHeroesUseCase = GetAllHeroesUseCase(repository = repository)
+        )
+
+    @Provides
+    @Singleton
+    fun provideSearchUseCases(repository: BorutoRepository): SearchUseCases =
+        SearchUseCases(
+            searchHeroesUseCase = SearchHeroesUseCase(repository)
         )
 }

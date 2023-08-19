@@ -37,14 +37,20 @@ import java.net.SocketTimeoutException
 
 @Composable
 fun EmptyScreen(
-    error: LoadState.Error
+    message: String = "Find your favorite heroes!",
+    error: LoadState.Error? = null
 ) {
-    val message by remember {
-        mutableStateOf(parseErrorMessage(error = error))
+    var message by remember {
+        mutableStateOf(message)
     }
 
-    val icon by remember {
-        mutableStateOf(R.drawable.ic_network_error)
+    var icon by remember {
+        mutableStateOf(R.drawable.ic_search_placeholder)
+    }
+
+    if (error != null) {
+        message = parseErrorMessage(error = error)
+        icon = R.drawable.ic_network_error
     }
 
     var startAnimation by remember {
@@ -97,7 +103,7 @@ fun EmptyContent(
     }
 }
 
-fun parseErrorMessage(error: LoadState.Error) : String {
+private fun parseErrorMessage(error: LoadState.Error) : String {
     return when(error.error) {
         is SocketTimeoutException -> "Server Unavailable."
         is ConnectException -> "Internet Unavailable."

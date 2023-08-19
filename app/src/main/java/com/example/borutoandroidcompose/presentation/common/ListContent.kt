@@ -166,6 +166,10 @@ fun handlePagingResult(
                 EmptyScreen(error = error)
                 false
             }
+            heroes.itemSnapshotList.isEmpty() -> {
+                EmptyScreen()
+                false
+            }
             else -> true
         }
     }
