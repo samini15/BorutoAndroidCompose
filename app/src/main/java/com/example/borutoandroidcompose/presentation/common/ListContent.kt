@@ -163,7 +163,7 @@ fun handlePagingResult(
                 false
             }*/
             error != null -> {
-                EmptyScreen(error = error)
+                EmptyScreen(error = error, items = heroes)
                 false
             }
             heroes.itemSnapshotList.isEmpty() -> {

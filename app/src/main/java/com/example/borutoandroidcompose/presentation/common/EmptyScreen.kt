@@ -9,8 +9,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ContentAlpha
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,18 +33,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import com.example.borutoandroidcompose.R
+import com.example.borutoandroidcompose.domain.model.Hero
 import com.example.borutoandroidcompose.ui.theme.DarkGray
 import com.example.borutoandroidcompose.ui.theme.LightGray
 import com.example.borutoandroidcompose.ui.theme.SMALL_PADDING
+import com.example.borutoandroidcompose.viewModel.HomeViewModel
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 
 @Composable
 fun EmptyScreen(
     message: String = "Find your favorite heroes!",
-    error: LoadState.Error? = null
+    error: LoadState.Error? = null,
+    items: LazyPagingItems<Hero>? = null
 ) {
     var message by remember {
         mutableStateOf(message)
@@ -68,20 +79,36 @@ fun EmptyScreen(
         startAnimation = true
     }
 
-    EmptyContent(alphaAnim = alphaAnim, icon = icon, message = message)
+    EmptyContent(alphaAnim = alphaAnim, icon = icon, message = message, items = items)
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun EmptyContent(
+    viewModel: HomeViewModel = hiltViewModel(),
     alphaAnim: Float,
     icon: Int,
-    message: String
+    message: String,
+    items: LazyPagingItems<Hero>? = null,
+
 ) {
+    // Swipe to refresh
+    val isRefreshing by viewModel.isRefreshing
+    var pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = {
+            viewModel.refresh(items = items)
+        }
+    )
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .pullRefresh(pullRefreshState)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        PullRefreshIndicator(isRefreshing, pullRefreshState, Modifier.align(alignment = Alignment.CenterHorizontally))
         Icon(
             modifier = Modifier
                 .size(120.dp)
@@ -99,7 +126,6 @@ fun EmptyContent(
             fontWeight = FontWeight.Medium,
             fontSize = MaterialTheme.typography.bodyMedium.fontSize
         )
-
     }
 }
 
