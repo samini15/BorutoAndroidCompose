@@ -7,6 +7,8 @@ import com.example.borutoandroidcompose.data.remote.RemoteDataSource
 import com.example.borutoandroidcompose.domain.model.Hero
 import com.example.borutoandroidcompose.domain.repository.BaseRepository
 import com.example.borutoandroidcompose.domain.repository.BorutoRepository
+import com.example.borutoandroidcompose.domain.useCases.details.DetailsUseCases
+import com.example.borutoandroidcompose.domain.useCases.details.FindSelectedHeroUseCase
 import com.example.borutoandroidcompose.domain.useCases.home.GetAllHeroesUseCase
 import com.example.borutoandroidcompose.domain.useCases.home.HomeUseCases
 import com.example.borutoandroidcompose.domain.useCases.onboarding.OnboardingUseCases
@@ -52,5 +54,12 @@ object RepositoryModule {
     fun provideSearchUseCases(repository: BorutoRepository): SearchUseCases =
         SearchUseCases(
             searchHeroesUseCase = SearchHeroesUseCase(repository)
+        )
+
+    @Provides
+    @Singleton
+    fun provideDetailsUseCases(repository: BorutoRepository): DetailsUseCases =
+        DetailsUseCases(
+            findSelectedHeroUseCase = FindSelectedHeroUseCase(repository = repository)
         )
 }

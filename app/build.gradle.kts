@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "com.example.borutoandroidcompose"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.borutoandroidcompose"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -72,6 +72,9 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // Compose Lifecycle
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0-alpha01")
 
     // Room --> https://developer.android.com/training/data-storage/room?hl=fr
     implementation("androidx.room:room-runtime:2.5.2")

@@ -20,4 +20,6 @@ object Constants {
 
     // Paging 3
     const val PAGING_BATCH_SIZE = 3
+
+    const val DESCRIPTION_TEXT_MAX_LINES = 8
 }
