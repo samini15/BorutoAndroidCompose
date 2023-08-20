@@ -1,6 +1,7 @@
 package com.example.borutoandroidcompose.presentation.screens.details
 
 import android.annotation.SuppressLint
+import android.graphics.Color.parseColor
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,7 +29,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -39,6 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import androidx.palette.graphics.Target
 import coil.compose.rememberAsyncImagePainter
 import com.example.borutoandroidcompose.R
 import com.example.borutoandroidcompose.domain.model.Hero
@@ -52,13 +58,34 @@ import com.example.borutoandroidcompose.ui.theme.MEDIUM_PADDING
 import com.example.borutoandroidcompose.ui.theme.MIN_BOTTOM_SHEET_HEIGHT
 import com.example.borutoandroidcompose.ui.theme.titleColor
 import com.example.borutoandroidcompose.utils.Constants
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DetailsContent(
     navController: NavHostController,
-    selectedHero: Hero?
+    selectedHero: Hero?,
+    colors: Map<String, String>
 ) {
+
+    // Color Palettes
+    var vibrantColor by remember { mutableStateOf("#000000") }
+    var darkVibrantColor by remember { mutableStateOf("#000000") }
+    var onDarkVibrantColor by remember { mutableStateOf("#FFFFFF") }
+
+    LaunchedEffect(key1 = selectedHero) {
+        vibrantColor = colors[Target.VIBRANT.toString()]!!
+        darkVibrantColor = colors[Target.DARK_VIBRANT.toString()]!!
+        onDarkVibrantColor = colors["onDarkVibrant"]!!
+    }
+
+    // Adapt status bar color
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setStatusBarColor(
+        color = Color(parseColor(darkVibrantColor))
+    )
+
+
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Expanded)
     )
@@ -82,7 +109,12 @@ fun DetailsContent(
         sheetPeekHeight = MIN_BOTTOM_SHEET_HEIGHT,
         sheetContent = {
             selectedHero?.let { hero ->
-                DetailsBottomSheetContent(selectedHero = hero)
+                DetailsBottomSheetContent(
+                    selectedHero = hero,
+                    infoBoxIconColor = Color(parseColor(vibrantColor)),
+                    sheetBackgroundColor = Color(parseColor(darkVibrantColor)),
+                    contentColor = Color(parseColor(onDarkVibrantColor))
+                )
             }
         }
     ) { innerPadding ->
@@ -90,6 +122,7 @@ fun DetailsContent(
             BackgroundImage(
                 heroImage = hero.image,
                 imageFraction = currentSheetFraction,
+                backgroundColor = Color(parseColor(darkVibrantColor)),
                 onCloseClicked = {
                     navController.popBackStack()
                 }

@@ -11,8 +11,11 @@ import com.example.borutoandroidcompose.domain.useCases.details.DetailsUseCases
 import com.example.borutoandroidcompose.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,4 +36,24 @@ class DetailsViewModel @Inject constructor(
             }
         }
     }
+
+    // SharedFlow used to trigger only ONE time this event
+    private val _uiEvent = MutableSharedFlow<UIEvent>()
+    val uiEvent: SharedFlow<UIEvent> = _uiEvent.asSharedFlow()
+
+    private val _colorPalette: MutableState<Map<String, String>> = mutableStateOf(emptyMap())
+    val colorPalette: State<Map<String, String>> = _colorPalette
+
+    fun setColorPalette(colors: Map<String, String>) {
+        _colorPalette.value = colors
+    }
+
+    fun generateColorPalette() =
+        viewModelScope.launch {
+            _uiEvent.emit(UIEvent.GenerateColorPalette)
+        }
+}
+
+sealed class UIEvent {
+    object GenerateColorPalette: UIEvent()
 }
