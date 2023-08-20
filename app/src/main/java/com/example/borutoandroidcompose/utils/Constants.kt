@@ -22,4 +22,6 @@ object Constants {
     const val PAGING_BATCH_SIZE = 3
 
     const val DESCRIPTION_TEXT_MAX_LINES = 8
+
+    const val MIN_BOTTOMSHEET_BACKGROUND_IMAGE_FRACTION = 0.4f
 }
