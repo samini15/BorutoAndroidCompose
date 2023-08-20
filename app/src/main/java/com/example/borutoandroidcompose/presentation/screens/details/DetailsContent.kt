@@ -1,10 +1,13 @@
 package com.example.borutoandroidcompose.presentation.screens.details
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -12,9 +15,12 @@ import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material.rememberBottomSheetState
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,11 +28,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
 import com.example.borutoandroidcompose.R
 import com.example.borutoandroidcompose.domain.model.Hero
 import com.example.borutoandroidcompose.presentation.widgets.InfoBox
@@ -56,8 +64,13 @@ fun DetailsContent(
             }
         }
     ) { innerPadding ->
-        Box(Modifier.padding(innerPadding)) {
-            Text("Scaffold Content")
+        selectedHero?.let { hero ->
+            BackgroundImage(
+                heroImage = hero.image,
+                onCloseClicked = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
@@ -155,6 +168,46 @@ fun DetailsBottomSheetContent(
             OrderedList(title = stringResource(R.string.family), items = selectedHero.family, textColor = contentColor)
             OrderedList(title = stringResource(R.string.abilities), items = selectedHero.abilities, textColor = contentColor)
             OrderedList(title = stringResource(R.string.nature_types), items = selectedHero.natureTypes, textColor = contentColor)
+        }
+    }
+}
+
+@Composable
+fun BackgroundImage(
+    heroImage: String,
+    imageFraction: Float = 1f,
+    backgroundColor: Color = MaterialTheme.colorScheme.surface,
+    onCloseClicked: () -> Unit
+) {
+    val imageUrl = "${Constants.BORUTO_API_BASE_URL}$heroImage"
+    val painter = rememberAsyncImagePainter(model = imageUrl)
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(backgroundColor)
+    ) {
+        Image(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(fraction = imageFraction)
+                .align(Alignment.TopStart),
+            painter = painter,
+            contentDescription = stringResource(id = R.string.hero_image_content_description),
+            contentScale = ContentScale.Crop
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        ) {
+            IconButton(modifier = Modifier.padding(MEDIUM_PADDING), onClick = { onCloseClicked() }) {
+                Icon(
+                    modifier = Modifier.size(INFO_BOX_ICON_SIZE),
+                    imageVector = Icons.Default.Close,
+                    contentDescription = stringResource(id = R.string.close_icon_content_description),
+                    tint = Color.White
+                )
+            }
         }
     }
 }
