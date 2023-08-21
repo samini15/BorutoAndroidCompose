@@ -71,6 +71,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    androidTestImplementation("com.google.truth:truth:1.0.1")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
@@ -115,4 +116,8 @@ dependencies {
     implementation("androidx.palette:palette-ktx:1.0.0")
 
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.33.0-alpha")
+
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+    testImplementation("com.google.truth:truth:1.0.1")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.10.0")
 }
