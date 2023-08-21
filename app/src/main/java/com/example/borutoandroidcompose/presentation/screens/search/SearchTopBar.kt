@@ -22,6 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,6 +31,8 @@ import com.example.borutoandroidcompose.R
 import com.example.borutoandroidcompose.ui.theme.TOP_APP_BAR_HEIGHT
 import com.example.borutoandroidcompose.ui.theme.topAppBarBackgroundColor
 import com.example.borutoandroidcompose.ui.theme.topAppBarContentColor
+import com.example.borutoandroidcompose.utils.Constants
+import com.example.borutoandroidcompose.utils.UISemantics
 
 @Composable
 fun SearchTopBar(
@@ -45,7 +49,6 @@ fun SearchTopBar(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchWidget(
     text: String,
@@ -57,13 +60,15 @@ fun SearchWidget(
 
     Surface(modifier = Modifier
         .fillMaxWidth()
-        .height(TOP_APP_BAR_HEIGHT),
+        .height(TOP_APP_BAR_HEIGHT)
+        .semantics { contentDescription = UISemantics.SEARCH_WIDGET },
         shadowElevation = AppBarDefaults.TopAppBarElevation,
         color = MaterialTheme.colorScheme.topAppBarBackgroundColor
     ) {
         TextField(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .semantics { contentDescription = UISemantics.SEARCH_TEXT_FIELD },
             value = text,
             onValueChange = { onTextChanged(it) },
             placeholder = {
@@ -85,7 +90,12 @@ fun SearchWidget(
                 }
             },
             trailingIcon = {
-                IconButton(onClick = {
+                IconButton(
+                    modifier = Modifier
+                        .semantics {
+                                   contentDescription = UISemantics.SEARCH_CLOSE_ICON
+                        },
+                    onClick = {
                     if (text.isNotEmpty()) {
                         onTextChanged("")
                     } else {
