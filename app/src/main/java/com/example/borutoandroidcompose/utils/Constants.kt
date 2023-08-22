@@ -3,7 +3,8 @@ package com.example.borutoandroidcompose.utils
 object Constants {
 
     // Boruto API
-    const val BORUTO_API_BASE_URL = "http://10.0.2.2:8080" // Do not use localhost --> will not work on emulator
+    //const val BORUTO_API_BASE_URL = "http://10.0.2.2:8080" // Do not use localhost --> will not work on emulator
+    const val BORUTO_API_BASE_URL = "https://boruto-server-ktor-6c8638842ddd.herokuapp.com/"
 
     const val DETAILS_SCREEN_ARG_KEY = "heroId"
 
