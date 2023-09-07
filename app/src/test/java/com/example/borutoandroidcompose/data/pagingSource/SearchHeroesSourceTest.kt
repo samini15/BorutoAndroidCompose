@@ -2,21 +2,36 @@ package com.example.borutoandroidcompose.data.pagingSource
 
 import androidx.paging.PagingSource
 import com.example.borutoandroidcompose.data.remote.BorutoApiService
-import com.example.borutoandroidcompose.data.remote.FakeBorutoApiService
 import com.example.borutoandroidcompose.domain.model.Hero
+import com.example.borutoandroidcompose.utils.enqueueMockResponseFromFile
 import com.google.common.truth.Truth
+import com.google.gson.Gson
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import okhttp3.mockwebserver.MockWebServer
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.net.HttpURLConnection
 
 class SearchHeroesSourceTest {
 
     private lateinit var borutoApiService: BorutoApiService
     private lateinit var heroes: List<Hero>
+    private lateinit var mockWebServer: MockWebServer
 
     @Before
     fun setUp() {
-        borutoApiService = FakeBorutoApiService()
+        mockWebServer = MockWebServer()
+        mockWebServer.start()
+
+        borutoApiService = Retrofit.Builder()
+            .baseUrl(mockWebServer.url("/"))
+            .addConverterFactory(GsonConverterFactory.create(Gson()))
+            .build().create(BorutoApiService::class.java)
+
         heroes = listOf(
             Hero(
                 id = 1,
@@ -108,9 +123,19 @@ class SearchHeroesSourceTest {
         )
     }
 
+    @After
+    fun tearDown() {
+        mockWebServer.shutdown()
+    }
+
+    // API endpoint
+
+
     @Test
     fun `Search api with existing hero name, expect single result, assert LoadResult_Page`() =
-        runTest {
+        runBlocking {
+            mockWebServer.enqueueMockResponseFromFile("Sasuke.json", HttpURLConnection.HTTP_OK)
+
             val heroSource = SearchHeroesSource(borutoApiService = borutoApiService, query = "Sasuke")
 
             val actual = heroSource.load(
@@ -128,6 +153,7 @@ class SearchHeroesSourceTest {
     @Test
     fun `Search api with existing hero name, expect multiple result, assert LoadResult_Page`() =
         runTest {
+            mockWebServer.enqueueMockResponseFromFile("HeroesStartingWithSA.json", HttpURLConnection.HTTP_OK)
             val heroSource = SearchHeroesSource(borutoApiService = borutoApiService, query = "Sa")
 
             val actual = heroSource.load(
@@ -144,12 +170,13 @@ class SearchHeroesSourceTest {
 
     @Test
     fun `Search api with empty hero name, expect empty list, assert LoadResult_Page`() =
-        runTest {
-            val heroSource = SearchHeroesSource(borutoApiService = borutoApiService, query = "")
+        runBlocking {
+            mockWebServer.enqueueMockResponseFromFile("EmptyResult.json", HttpURLConnection.HTTP_OK)
+            //val heroSource = SearchHeroesSource(borutoApiService = borutoApiService, query = "")
 
-            val loadResult = heroSource.load(
+            /*val loadResult = heroSource.load(
                 PagingSource.LoadParams.Refresh(key = null, loadSize = 3, placeholdersEnabled = false)
-            )
+            )*/
 
             val result = borutoApiService.searchHeroes(name = "").result
 
@@ -160,6 +187,7 @@ class SearchHeroesSourceTest {
     @Test
     fun `Search api with non existing hero name, expect empty list, assert LoadResult_Page`() =
         runTest {
+            mockWebServer.enqueueMockResponseFromFile("EmptyResult.json", HttpURLConnection.HTTP_OK)
             val heroSource = SearchHeroesSource(borutoApiService = borutoApiService, query = "Unknown")
 
             val actual = heroSource.load(

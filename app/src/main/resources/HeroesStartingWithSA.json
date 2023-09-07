@@ -1,0 +1,67 @@
+{
+  "success": true,
+  "message": "Ok",
+  "previousPage": null,
+  "nextPage": null,
+  "lastUpdated": null,
+  "result": [
+    {
+      "id": 1,
+      "name": "Sasuke",
+      "image": "/images/sasuke.jpg",
+      "about": "Sasuke Uchiha (うちはサスケ, Uchiha Sasuke) is one of the last surviving members of Konohagakure's Uchiha clan. After his older brother, Itachi, slaughtered their clan, Sasuke made it his mission in life to avenge them by killing Itachi. He is added to Team 7 upon becoming a ninja and, through competition with his rival and best friend, Naruto Uzumaki.",
+      "rating": 5.0,
+      "power": 98,
+      "birthMonth": "July",
+      "birthDay": "23rd",
+      "family": [
+        "Fugaku",
+        "Mikoto",
+        "Itachi",
+        "Sarada",
+        "Sakura"
+      ],
+      "abilities": [
+        "Sharingan",
+        "Rinnegan",
+        "Sussano",
+        "Amateratsu",
+        "Intelligence"
+      ],
+      "natureTypes": [
+        "Lightning",
+        "Fire",
+        "Wind",
+        "Earth",
+        "Water"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Sakura",
+      "image": "/images/sakura.jpg",
+      "about": "Sakura Uchiha (うちはサクラ, Uchiha Sakura, née Haruno (春野)) is a kunoichi of Konohagakure. When assigned to Team 7, Sakura quickly finds herself ill-prepared for the duties of a shinobi. However, after training under the Sannin Tsunade, she overcomes this, and becomes recognised as one of the greatest medical-nin in the world.",
+      "rating": 4.5,
+      "power": 92,
+      "birthMonth": "Mar",
+      "birthDay": "28th",
+      "family": [
+        "Kizashi",
+        "Mebuki",
+        "Sarada",
+        "Sasuke"
+      ],
+      "abilities": [
+        "Chakra Control",
+        "Medical Ninjutsu",
+        "Strength",
+        "Intelligence"
+      ],
+      "natureTypes": [
+        "Earth",
+        "Water",
+        "Fire"
+      ]
+    }
+  ]
+}

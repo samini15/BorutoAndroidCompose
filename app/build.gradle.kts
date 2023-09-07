@@ -66,8 +66,24 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material:1.6.0-alpha03")
     implementation("androidx.navigation:navigation-compose:2.6.0")
+    implementation("androidx.test:monitor:1.6.1")
 
+    // Junit 4
     testImplementation("junit:junit:4.13.2")
+    // Junit 5
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.3")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3")
+
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+    testImplementation("com.google.truth:truth:1.0.1")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.11.0")
+
+
+    androidTestImplementation("com.willowtreeapps.assertk:assertk:0.26.1")
+    androidTestImplementation("io.mockk:mockk-android:1.12.5")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.44")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.44")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
@@ -105,6 +121,9 @@ dependencies {
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    implementation("com.google.code.gson:gson:2.9.1")
 
     // Paging
     implementation("androidx.paging:paging-runtime-ktx:3.2.0")
@@ -117,13 +136,4 @@ dependencies {
     implementation("androidx.palette:palette-ktx:1.0.0")
 
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.33.0-alpha")
-
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
-    testImplementation("com.google.truth:truth:1.0.1")
-    testImplementation("com.squareup.okhttp3:mockwebserver:4.11.0")
-
-    androidTestImplementation("com.willowtreeapps.assertk:assertk:0.26.1")
-    androidTestImplementation("io.mockk:mockk-android:1.12.5")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.44")
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.44")
 }
